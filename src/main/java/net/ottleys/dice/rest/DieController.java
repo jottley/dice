@@ -33,8 +33,9 @@ public class DieController {
 
     /**
      * Roll standard variant die
+     * 
      * @param variant d2, d4, d6, d8, d12, d20
-     * @param rolls the number of rolls of the die
+     * @param rolls   the number of rolls of the die
      * @return
      */
     @RequestMapping("/roll/standard/{variant}/{rolls}")
@@ -61,8 +62,12 @@ public class DieController {
 
     /**
      * d10 can have special numbering
+     * 
      * @param rolls the number of rolls of the die
-     * @param base ZERO (default): the sides of the die start at 0 and end at 9; ONE: the sides of the die start at 1 and end at 10; TEN: the sides of the die start at 0 and end at 90. The result of a roll is rounded to the nearest value of 10.
+     * @param base  ZERO (default): the sides of the die start at 0 and end at 9;
+     *              ONE: the sides of the die start at 1 and end at 10; TEN: the
+     *              sides of the die start at 0 and end at 90. The result of a roll
+     *              is rounded to the nearest value of 10.
      * @return
      */
     @RequestMapping("/roll/standard/d10/{rolls}/{base}")
@@ -87,7 +92,8 @@ public class DieController {
     }
 
     /**
-     * Any custom sided die...not matter how unrealistic
+     * Any custom sided die...not matter how unrealistic...well almost...sides must be 2 or greater
+     * 
      * @param sides the number of sides of the die
      * @param rolls the number of rolls of the die
      * @return
@@ -96,17 +102,18 @@ public class DieController {
     public List<Die> roll(@PathVariable int sides, @PathVariable int rolls) {
 
         List<Die> dice = new ArrayList<Die>();
-
-        int roll = 0;
-        while (roll < rolls) {
-            Die die;
-            try {
-                die = new Die(sides);
-                die.roll();
-                dice.add(die);
-                roll++;
-            } catch (MaxMinException e) {
-                e.printStackTrace();
+        if (sides > 1) {
+            int roll = 0;
+            while (roll < rolls) {
+                Die die;
+                try {
+                    die = new Die(sides);
+                    die.roll();
+                    dice.add(die);
+                    roll++;
+                } catch (MaxMinException e) {
+                    e.printStackTrace();
+                }
             }
         }
 
