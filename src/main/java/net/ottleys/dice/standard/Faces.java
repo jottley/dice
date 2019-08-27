@@ -13,19 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.ottleys.dice;
+package net.ottleys.dice.standard;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+public enum Faces {
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
-public class ApplicationTests {
+    TWO(2), FOUR(4), SIX(6), EIGHT(8), TEN(10), TWELVE(12), TWENTY(20);
 
-	@Test
-	public void contextLoads() {
-	}
+    private final int face;
+
+    Faces(int face) {
+        this.face = face;
+    }
+
+    public int getValue() {
+        return face;
+    }
 
 }

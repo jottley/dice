@@ -13,19 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.ottleys.dice;
+package net.ottleys.dice.standard;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import net.ottleys.dice.Die;
+import net.ottleys.dice.MaxMinException;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
-public class ApplicationTests {
+public class d2 extends Die {
 
-	@Test
-	public void contextLoads() {
-	}
+    public d2() throws MaxMinException {
+        super(Faces.TWO);
+    }
 
 }
