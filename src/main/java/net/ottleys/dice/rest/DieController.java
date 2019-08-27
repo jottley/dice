@@ -1,5 +1,5 @@
 /**
- * Copyright 2019 Jared Ottley
+ * Copyright 2019 ottleys.net
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,6 +31,12 @@ import net.ottleys.dice.standard.d10.Base;
 @RequestMapping("/dice")
 public class DieController {
 
+    /**
+     * Roll standard variant die
+     * @param variant d2, d4, d6, d8, d12, d20
+     * @param rolls the number of rolls of the die
+     * @return
+     */
     @RequestMapping("/roll/standard/{variant}/{rolls}")
     public List<Die> roll(@PathVariable String variant, @PathVariable int rolls) {
         List<Die> dice = new ArrayList<Die>();
@@ -53,6 +59,12 @@ public class DieController {
         return dice;
     }
 
+    /**
+     * d10 can have special numbering
+     * @param rolls the number of rolls of the die
+     * @param base ZERO (default): the sides of the die start at 0 and end at 9; ONE: the sides of the die start at 1 and end at 10; TEN: the sides of the die start at 0 and end at 90. The result of a roll is rounded to the nearest value of 10.
+     * @return
+     */
     @RequestMapping("/roll/standard/d10/{rolls}/{base}")
     public List<Die> roll(@PathVariable int rolls, @PathVariable(required = false) Base base) {
 
@@ -74,6 +86,12 @@ public class DieController {
         return dice;
     }
 
+    /**
+     * Any custom sided die...not matter how unrealistic
+     * @param sides the number of sides of the die
+     * @param rolls the number of rolls of the die
+     * @return
+     */
     @RequestMapping("/roll/custom/{sides}/{rolls}")
     public List<Die> roll(@PathVariable int sides, @PathVariable int rolls) {
 

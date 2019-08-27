@@ -1,5 +1,5 @@
 /**
- * Copyright 2019 Jared Ottley
+ * Copyright 2019 ottleys.net
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,9 @@
  */
 package net.ottleys.dice.standard;
 
+/**
+ * The standard variants of dice accourding to the d20 system plus a d2
+ */
 public enum Faces {
 
     TWO(2), FOUR(4), SIX(6), EIGHT(8), TEN(10), TWELVE(12), TWENTY(20);

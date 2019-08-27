@@ -1,5 +1,5 @@
 /**
- * Copyright 2019 Jared Ottley
+ * Copyright 2019 ottleys.net
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,10 @@ public class MaxMinException extends Exception {
 
     private static final long serialVersionUID = 1L;
 
+    /**
+     * Maximum value of a die is greater than the minimum value of a die
+     * @param message
+     */
     public MaxMinException(String message) {
         super(message);
     }

@@ -1,5 +1,5 @@
 /**
- * Copyright 2019 Jared Ottley
+ * Copyright 2019 ottleys.net
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,9 @@ package net.ottleys.dice.standard;
 import net.ottleys.dice.Die;
 import net.ottleys.dice.MaxMinException;
 
+/**
+ * A 12 sided die
+ */
 public class d12 extends Die {
 
     public d12() throws MaxMinException {
