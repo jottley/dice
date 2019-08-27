@@ -27,6 +27,7 @@ public class d10 extends Die {
 
     public d10() throws MaxMinException {
         super(Faces.TEN);
+        setMinMax(0, 9);
     }
 
     public d10(Base base) throws MaxMinException {
@@ -34,8 +35,8 @@ public class d10 extends Die {
         this.base = base;
 
         switch (base) {
-            case ZERO: setMinMax(0, 9);
-            case ONE: setMinMax(1,10);
+            case ZERO: setMinMax(0, 9); break;
+            case ONE: setMinMax(1,10); break;
             case TEN: setMinMax(0, 90);
         }
     }
@@ -55,6 +56,8 @@ public class d10 extends Die {
         {
             result = Math.round(result/10) * 10;
         }
+
+        this.rolled = result;
         
         return result;
     }

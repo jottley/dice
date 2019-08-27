@@ -24,6 +24,7 @@ public class Die {
     public int sides = 0;
     public int min = 1;
     public int max;
+    public int rolled = -1;
 
     public Die(int sides) throws MaxMinException {
         this.sides = sides;
@@ -39,7 +40,9 @@ public class Die {
 
     public int roll() {
         Random random = new Random();
-        return random.nextInt((max - min) + 1) + min;
+        this.rolled = random.nextInt((max - min) + 1) + min;
+
+        return rolled;
     }
 
     private void validateMax() throws MaxMinException {
