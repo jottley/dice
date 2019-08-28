@@ -15,17 +15,16 @@
  */
 package net.ottleys.dice;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+public class MaxMinException extends Exception {
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
-public class ApplicationTests {
+    private static final long serialVersionUID = 1L;
 
-	@Test
-	public void contextLoads() {
-	}
+    /**
+     * Maximum value of a die is greater than the minimum value of a die
+     * @param message
+     */
+    public MaxMinException(String message) {
+        super(message);
+    }
 
 }
