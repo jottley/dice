@@ -18,4 +18,4 @@ We are using the following:
 
 * Java 8
 * Spring Boot 2.0.3
-* Maven 3s
+* Maven 3
