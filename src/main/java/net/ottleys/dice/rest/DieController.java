@@ -18,9 +18,14 @@ package net.ottleys.dice.rest;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.request.WebRequest;
 
 import net.ottleys.dice.Die;
 import net.ottleys.dice.MaxMinException;
@@ -37,9 +42,13 @@ public class DieController {
      * @param variant d2, d4, d6, d8, d12, d20
      * @param rolls   the number of rolls of the die
      * @return
+     * @throws ClassNotFoundException
+     * @throws IllegalAccessException
+     * @throws InstantiationException
+     * @throws Exception
      */
     @RequestMapping("/roll/standard/{variant}/{rolls}")
-    public List<Die> roll(@PathVariable String variant, @PathVariable int rolls) {
+    public ResponseEntity<List<Die>> roll(@PathVariable String variant, @PathVariable int rolls) throws Exception {
         List<Die> dice = new ArrayList<Die>();
 
         try {
@@ -52,12 +61,12 @@ public class DieController {
                 dice.add(die);
                 roll++;
             }
-
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException
-                | IllegalArgumentException e) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
+            throw e;
         }
-        return dice;
+
+        return new ResponseEntity<>(dice, HttpStatus.OK);
     }
 
     /**
@@ -69,9 +78,11 @@ public class DieController {
      *              sides of the die start at 0 and end at 90. The result of a roll
      *              is rounded to the nearest value of 10.
      * @return
+     * @throws MaxMinException
      */
     @RequestMapping("/roll/standard/d10/{rolls}/{base}")
-    public List<Die> roll(@PathVariable int rolls, @PathVariable(required = false) Base base) {
+    public ResponseEntity<List<Die>> roll(@PathVariable int rolls, @PathVariable(required = false) Base base)
+            throws MaxMinException {
 
         List<Die> dice = new ArrayList<Die>();
 
@@ -85,21 +96,24 @@ public class DieController {
                 roll++;
             } catch (MaxMinException e) {
                 e.printStackTrace();
+                throw e;
             }
         }
 
-        return dice;
+        return new ResponseEntity<>(dice, HttpStatus.OK);
     }
 
     /**
-     * Any custom sided die...not matter how unrealistic...well almost...sides must be 2 or greater
+     * Any custom sided die...not matter how unrealistic...well almost...sides must
+     * be 2 or greater
      * 
      * @param sides the number of sides of the die
      * @param rolls the number of rolls of the die
      * @return
+     * @throws MaxMinException
      */
     @RequestMapping("/roll/custom/{sides}/{rolls}")
-    public List<Die> roll(@PathVariable int sides, @PathVariable int rolls) {
+    public ResponseEntity<List<Die>> roll(@PathVariable int sides, @PathVariable int rolls) throws MaxMinException {
 
         List<Die> dice = new ArrayList<Die>();
         if (sides > 1) {
@@ -113,11 +127,50 @@ public class DieController {
                     roll++;
                 } catch (MaxMinException e) {
                     e.printStackTrace();
+                    throw e;
                 }
             }
+        } else {
+            throw new MaxMinException("Sides must be greater than 1. (" + sides + ")");
         }
 
-        return dice;
+        return new ResponseEntity<>(dice, HttpStatus.OK);
+    }
+
+    // Exception handling for this controller
+    @ExceptionHandler(ClassNotFoundException.class)
+    public final ResponseEntity<ApiError> handleException(ClassNotFoundException ex, WebRequest request) {
+
+        return new ResponseEntity<>(
+                new ApiError(HttpStatus.BAD_REQUEST, "Unknown die variant: " + getVariantName(ex.getMessage()),
+                        ex.getClass().getName() + ": " + ex.getMessage()),
+                HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler({ InstantiationException.class, IllegalAccessException.class })
+    public final ResponseEntity<ApiError> handleException(Exception ex, WebRequest request) {
+
+        return new ResponseEntity<>(new ApiError(HttpStatus.INTERNAL_SERVER_ERROR, "Unable to create standard die",
+                ex.getClass().getName() + ": " + ex.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(MaxMinException.class)
+    public final ResponseEntity<ApiError> handleException(MaxMinException ex, WebRequest request) {
+
+        return new ResponseEntity<>(
+                new ApiError(HttpStatus.BAD_REQUEST, ex.getMessage(), ex.getClass().getName() + ": " + ex.getMessage()),
+                HttpStatus.BAD_REQUEST);
+    }
+
+    private String getVariantName(String canonicalName) {
+        String variant = null;
+
+        if (!StringUtils.isEmpty(canonicalName)) {
+            String[] tokenizedName = StringUtils.tokenizeToStringArray(canonicalName, ".");
+            variant = tokenizedName[tokenizedName.length - 1];
+        }
+
+        return variant;
     }
 
 }
